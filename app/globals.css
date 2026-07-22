@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  /* Familles de polices utilisées par Tailwind (voir tailwind.config.js) */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #0B0F0E;
+  color: #EDE9E0;
+}
+
+/* Fond général avec un léger halo "feutre" */
+body {
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 20% -10%, rgba(18, 184, 134, 0.10), transparent 45%),
+    radial-gradient(circle at 90% 10%, rgba(228, 185, 91, 0.06), transparent 40%);
+  background-attachment: fixed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Barre de défilement discrète */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F0E;
+}
+::-webkit-scrollbar-thumb {
+  background: #1A2523;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #25322F;
+}
+
+@layer components {
+  /* Carte réutilisable au look premium */
+  .card {
+    @apply rounded-2xl border border-ink-700 bg-ink-850/80 backdrop-blur-sm shadow-card;
+  }
+
+  /* Champ de formulaire */
+  .field {
+    @apply w-full rounded-xl border border-ink-700 bg-ink-900 px-4 py-3 text-bone
+           placeholder:text-muted outline-none transition
+           focus:border-jade-500 focus:ring-2 focus:ring-jade-500/30;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-muted;
+  }
+
+  /* Bouton principal (émeraude) */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3
+           font-semibold transition active:scale-[0.98] disabled:opacity-50
+           disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-jade-500 text-ink-950 hover:bg-jade-400 shadow-glow;
+  }
+  .btn-ghost {
+    @apply btn border border-ink-700 bg-ink-800 text-bone hover:border-jade-500/50 hover:bg-ink-700;
+  }
+  .btn-danger {
+    @apply btn border border-red-500/30 bg-red-500/10 text-red-300 hover:bg-red-500/20;
+  }
+
+  /* Petite étiquette (statut, casino…) */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-ink-700
+           bg-ink-800 px-3 py-1 text-xs font-medium text-muted;
+  }
+
+  /* Valeur chiffrée mise en avant (mono) */
+  .stat-value {
+    @apply font-mono text-2xl font-semibold text-bone tabular-nums;
+  }
+  .stat-label {
+    @apply text-xs uppercase tracking-widest text-muted;
+  }
+
+  /* Eyebrow : petit intitulé au-dessus des titres */
+  .eyebrow {
+    @apply mb-3 inline-block text-xs font-semibold uppercase tracking-[0.22em] text-jade-400;
+  }
+}
+
+/* Respect des préférences de réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
