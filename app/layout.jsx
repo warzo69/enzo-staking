@@ -2,7 +2,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 
 export const metadata = {
-  title: 'Enzo Noury — Staking Poker',
+  title: 'Enzo Nourry — Staking Poker',
   description: 'Financez mes tournois de poker et partagez mes résultats. ROI, stats et suivi en direct.',
 };
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <footer className="border-t border-ink-800 py-8 text-center text-sm text-muted">
-          <p>© {new Date().getFullYear()} Enzo Noury — Staking Poker</p>
+          <p>© {new Date().getFullYear()} Enzo Nourry — Staking Poker</p>
           <p className="mt-1 text-xs">
             Le staking comporte des risques. Ne misez que ce que vous pouvez vous permettre de perdre.
           </p>
