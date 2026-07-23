@@ -49,7 +49,7 @@ export default function HomePage() {
         >
           <span className="eyebrow">Staking Poker</span>
           <h1 className="font-display text-4xl font-bold leading-tight text-bone sm:text-5xl">
-            {profile?.full_name || 'Enzo Noury'}
+            {profile?.full_name || 'Enzo Nourry'}
           </h1>
           {profile?.pseudo && (
             <p className="mt-2 font-mono text-jade-400">« {profile.pseudo} »</p>

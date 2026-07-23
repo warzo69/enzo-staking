@@ -26,7 +26,7 @@ export default function Navbar() {
         {/* Logo / nom */}
         <Link href="/" className="flex items-center gap-2 font-display text-lg font-bold text-bone">
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-jade-500 text-ink-950">♠</span>
-          Enzo&nbsp;Noury
+          Enzo&nbsp;Nourry
         </Link>
 
         {/* Liens (ordinateur) */}
