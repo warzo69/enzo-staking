@@ -9,9 +9,10 @@ import { euro, percent, investorShareOfSold } from '@/lib/format';
  * - tournamentId : le tournoi concerné
  * - sought       : montant recherché (pour calculer la part)
  * - remaining    : montant restant à collecter
+ * - paymentInfo  : instructions de paiement (saisies dans l'espace admin)
  * - onDone       : appelé après un ajout réussi (pour rafraîchir la liste)
  */
-export default function StakingForm({ tournamentId, sought = 0, remaining = 0, onDone }) {
+export default function StakingForm({ tournamentId, sought = 0, remaining = 0, paymentInfo = '', onDone }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [amount, setAmount] = useState('');
@@ -52,7 +53,6 @@ export default function StakingForm({ tournamentId, sought = 0, remaining = 0, o
     setLastName('');
     setAmount('');
     setSuccess(true);
-    setTimeout(() => setSuccess(false), 4000);
     onDone?.();
   }
 
@@ -95,13 +95,40 @@ export default function StakingForm({ tournamentId, sought = 0, remaining = 0, o
       )}
 
       {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+
       {success && (
-        <p className="mt-3 text-sm text-jade-400">Merci ! Votre participation a bien été enregistrée.</p>
+        <div className="mt-3 rounded-xl border border-jade-500/40 bg-jade-500/10 p-4">
+          <p className="font-medium text-jade-400">Participation enregistrée ✔</p>
+          <p className="mt-1 text-sm text-muted">
+            Dernière étape : effectuez le règlement pour valider votre part.
+          </p>
+          {paymentInfo ? (
+            <div className="mt-3 rounded-lg border border-ink-700 bg-ink-900 p-3">
+              <p className="mb-1 text-xs uppercase tracking-widest text-muted">Comment régler</p>
+              <p className="whitespace-pre-wrap text-sm text-bone">{paymentInfo}</p>
+            </div>
+          ) : (
+            <p className="mt-2 text-sm text-muted">
+              Contactez-moi directement pour convenir du règlement.
+            </p>
+          )}
+          <button onClick={() => setSuccess(false)} className="btn-ghost mt-3 w-full">
+            Ajouter une autre participation
+          </button>
+        </div>
       )}
 
-      <button onClick={handleSubmit} disabled={loading} className="btn-primary mt-4 w-full">
-        {loading ? 'Enregistrement…' : 'Valider ma participation'}
-      </button>
+      {!success && (
+        <button onClick={handleSubmit} disabled={loading} className="btn-primary mt-4 w-full">
+          {loading ? 'Enregistrement…' : 'Valider ma participation'}
+        </button>
+      )}
+
+      <p className="mt-4 border-t border-ink-800 pt-3 text-[11px] leading-relaxed text-muted">
+        Staking entre particuliers, à titre privé. Votre participation n'est pas un placement
+        financier : le résultat dépend d'un tournoi de poker et la perte peut être totale.
+        Ne misez que ce que vous pouvez vous permettre de perdre.
+      </p>
     </div>
   );
 }

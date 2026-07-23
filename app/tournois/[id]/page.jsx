@@ -18,18 +18,21 @@ export default function TournamentDetailPage() {
   const [tournament, setTournament] = useState(null);
   const [investors, setInvestors] = useState([]);
   const [updates, setUpdates] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Charge (ou recharge) toutes les données du tournoi
   const load = useCallback(async () => {
-    const [{ data: t }, { data: inv }, { data: upd }] = await Promise.all([
+    const [{ data: t }, { data: inv }, { data: upd }, { data: prof }] = await Promise.all([
       supabase.from('tournaments').select('*').eq('id', id).single(),
       supabase.from('investors').select('*').eq('tournament_id', id).order('created_at'),
       supabase.from('live_updates').select('*').eq('tournament_id', id).order('created_at', { ascending: false }),
+      supabase.from('profile').select('*').eq('id', 1).single(),
     ]);
     setTournament(t);
     setInvestors(inv || []);
     setUpdates(upd || []);
+    setProfile(prof || null);
     setLoading(false);
   }, [id]);
 
@@ -60,6 +63,8 @@ export default function TournamentDetailPage() {
   const t = tournament;
   const sought = Number(t.amount_sought) || 0;
   const collected = sumCollected(investors);
+  const paidCollected = sumCollected(investors.filter((i) => i.paid));
+  const pending = Math.max(0, collected - paidCollected);
   const remaining = Math.max(0, sought - collected);
   const full = sought > 0 && collected >= sought;
   const canInvest = t.staking_open && !full && !t.is_finished;
@@ -129,12 +134,32 @@ export default function TournamentDetailPage() {
           {!t.is_finished && (
             <div className="card p-5">
               <ProgressBar collected={collected} sought={sought} full={full} />
+              {collected > 0 && (
+                <div className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-ink-800 text-center">
+                  <div className="bg-ink-900 px-3 py-2">
+                    <span className="stat-label">Encaissé</span>
+                    <p className="mt-0.5 font-mono text-sm text-jade-400">{euro(paidCollected)}</p>
+                  </div>
+                  <div className="bg-ink-900 px-3 py-2">
+                    <span className="stat-label">En attente</span>
+                    <p className={`mt-0.5 font-mono text-sm ${pending > 0 ? 'text-gold-300' : 'text-muted'}`}>
+                      {euro(pending)}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
           {/* Formulaire de participation */}
           {canInvest ? (
-            <StakingForm tournamentId={t.id} sought={sought} remaining={remaining} onDone={load} />
+            <StakingForm
+              tournamentId={t.id}
+              sought={sought}
+              remaining={remaining}
+              paymentInfo={profile?.payment_info || ''}
+              onDone={load}
+            />
           ) : !t.is_finished ? (
             <div className="card p-6 text-center text-sm text-muted">
               {full ? 'Ce tournoi est entièrement financé. Merci à tous !' : 'Le financement de ce tournoi est fermé.'}

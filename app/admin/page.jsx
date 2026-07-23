@@ -92,6 +92,7 @@ function ProfileEditor({ profile, onChange }) {
         pseudo: form.pseudo,
         photo_url: form.photo_url,
         bio: form.bio,
+        payment_info: form.payment_info,
         updated_at: new Date().toISOString(),
       })
       .eq('id', 1);
@@ -119,6 +120,18 @@ function ProfileEditor({ profile, onChange }) {
         <div className="sm:col-span-2">
           <label className="label">Présentation</label>
           <textarea className="field min-h-[90px]" value={form.bio || ''} onChange={(e) => set('bio', e.target.value)} />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="label">Instructions de paiement (affichées après une participation)</label>
+          <textarea
+            className="field min-h-[90px]"
+            value={form.payment_info || ''}
+            onChange={(e) => set('payment_info', e.target.value)}
+            placeholder={'Virement — IBAN : FR76 ...\nOu Lydia au 06 ...\nMerci d\'indiquer votre nom en référence.'}
+          />
+          <p className="mt-1 text-xs text-muted">
+            Ce texte s'affiche uniquement après qu'un visiteur a validé sa participation.
+          </p>
         </div>
       </div>
       <div className="mt-4 flex items-center gap-3">

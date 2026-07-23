@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { euro, amountSought } from '@/lib/format';
+import AdminInvestors from '@/components/AdminInvestors';
 
 /**
  * Éditeur complet d'un tournoi pour l'admin.
@@ -11,7 +12,7 @@ import { euro, amountSought } from '@/lib/format';
  */
 export default function AdminTournamentEditor({ tournament, onChange }) {
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState('infos'); // infos | direct | resultat
+  const [tab, setTab] = useState('infos'); // infos | investisseurs | direct | resultat
   const [form, setForm] = useState({ ...tournament });
   const [liveMessage, setLiveMessage] = useState('');
   const [saving, setSaving] = useState(false);
@@ -105,11 +106,11 @@ export default function AdminTournamentEditor({ tournament, onChange }) {
         <div className="border-t border-ink-800 p-5">
           {/* Onglets */}
           <div className="mb-5 flex gap-1 rounded-xl bg-ink-900 p-1">
-            {[['infos', 'Infos & staking'], ['direct', 'Suivi direct'], ['resultat', 'Résultat']].map(([key, label]) => (
+            {[['infos', 'Infos'], ['investisseurs', 'Investisseurs'], ['direct', 'Suivi direct'], ['resultat', 'Résultat']].map(([key, label]) => (
               <button
                 key={key}
                 onClick={() => setTab(key)}
-                className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                className={`flex-1 rounded-lg px-2 py-2 text-xs font-medium transition sm:text-sm ${
                   tab === key ? 'bg-ink-700 text-jade-400' : 'text-muted hover:text-bone'
                 }`}
               >
@@ -166,6 +167,13 @@ export default function AdminTournamentEditor({ tournament, onChange }) {
           )}
 
           {/* --------------------------------------------------- Onglet DIRECT */}
+          {/* -------------------------------------------- Onglet INVESTISSEURS */}
+          {tab === 'investisseurs' && (
+            <AdminInvestors tournamentId={tournament.id} onChange={onChange} />
+          )}
+
+          {/* ---------------------------------------------------- Onglet DIRECT */}
+
           {tab === 'direct' && (
             <div>
               <Field label="Tournoi en direct ?" full>

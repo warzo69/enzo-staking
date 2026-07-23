@@ -1,5 +1,5 @@
 -- ===========================================================================
---  BASE DE DONNÉES — Site de staking poker d'Enzo Noury
+--  BASE DE DONNÉES — Site de staking poker d'Enzo Nourry
 --  Copie/colle TOUT ce fichier dans Supabase > SQL Editor > Run (voir guide).
 -- ===========================================================================
 
@@ -11,10 +11,11 @@ create extension if not exists "pgcrypto";
 -- ---------------------------------------------------------------------------
 create table if not exists profile (
   id          int primary key default 1,
-  full_name   text        not null default 'Enzo Noury',
+  full_name   text        not null default 'Enzo Nourry',
   pseudo      text        not null default 'MonPseudo',
   photo_url   text        default '',
   bio         text        default 'Joueur de poker en tournois live.',
+  payment_info text       default '',
   updated_at  timestamptz not null default now(),
   constraint profile_single_row check (id = 1)
 );
@@ -71,6 +72,7 @@ create table if not exists investors (
   first_name     text not null,
   last_name      text default '',
   amount         numeric not null default 0,
+  paid           boolean not null default false,   -- réglé ou en attente
   created_at     timestamptz not null default now()
 );
 
